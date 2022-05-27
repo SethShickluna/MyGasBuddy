@@ -5,7 +5,7 @@
 
 > Add-in for a MyGeotab database to provide real time gas prices and gas station locations based on a current vehicles location.
 
-> Leverages the MyGeotab API (https://geotab.github.io/sdk/) to access location and vehicles data as well as the HERE fuel prices api to provide fuelling locations and price estimates 
+> Leverages the MyGeotab API (https://geotab.github.io/sdk/) to access location and vehicles data as well as the HERE Fuel Prices API (https://developer.here.com/documentation/fuel-prices/dev_guide/topics/api-reference.html) to provide fuelling locations and price estimates 
 ## Usage
 
 
