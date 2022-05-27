@@ -1,0 +1,17 @@
+{
+	"name": "MyGasBuddy",
+	"supportEmail": "sethshicklunapierce@gmail.com",
+	"version": "0.0.1",
+	"items": [
+		{
+			"url": "/MyGasBuddy/index.html",
+			"path": "ActivityLink",
+			"menuName": {
+				"en": "MyGasBuddy",
+				"fr": "CopainDeGaz"
+			},
+			"icon": "https://getdrawings.com/gas-can-icon#gas-can-icon-1.jpg"
+		}
+	],
+	"isSigned": false
+}
