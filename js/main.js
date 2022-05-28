@@ -1,5 +1,8 @@
-const API_KEY = JSON.parse("secrets.local.json")['GAS_API_KEY']; 
-const URL = "fuel-v2.cc.api.here.com/" 
+//const secrets = fetch("./secrets.local.json").then(response => {return console.log(response.body);}); 
+const URL = "https://fuel-v2.cc.api.here.com/" 
+const API_KEY = "YOUR_API_KEY"
+
+let currentDevice = null; 
 
 geotab.addin.integrationExample = function(api, state) {
 		const generateVehicleList = function(vehicles) {
@@ -29,23 +32,30 @@ geotab.addin.integrationExample = function(api, state) {
 				}
 			}, 
 			function(result){
-				let element = document.getElementById("results-section"); 
-				element.innerHTML = result; 
-
+				let deviceInfo = result[0]; 
+				api.call("GetAddresses", {
+					"coordinates":[{"x":deviceInfo.longitude,"y":deviceInfo.latitude}]
+				},function(addressData){
+					generateTable(deviceInfo,addressData[0]); 
+					getFuelData(deviceInfo); 
+				})
 			}, 
 			function(error){
-
+				alert(error.message);
 			}); 
-			//today gas api call on vehicles last known position
-
 		}
 		refreshPage = function() {
+			let element = document.getElementById("vehicle-dropdown");
+			while(element.firstChild){
+				element.removeChild(element.lastChild);
+			}
 			api.call("Get", {
 				"typeName": "Device"
 			}, function(result) {
+				currentDevice = result[0]; 
 				generateVehicleList(result)
 			}, function(error) {
-				console.log(error.message);
+				alert(error.message);
 			});
 		},
 		clearOnLeaving = function() {
@@ -69,11 +79,50 @@ geotab.addin.integrationExample = function(api, state) {
 };
 
 //get the results of the gas API call
-async function loadResults(deviceStatus){ 
-	let range = 100; 
-	let apiCall = `${url}fuel/stations.xml?prox=${deviceStatus['latitude']},${deviceStatus['latitude']},${range}&apiKey={${API_KEY}}}`
-	await fetch(apiCall, function(response){
-		document.getElementById("results-section").innerHTML += response; 
+async function getFuelData(deviceStatus){ 
+	let range = 1000; //TODO: make this an input note (this is in meters)
+	let apiCall = `${URL}fuel/stations.xml?prox=${deviceStatus.latitude},${deviceStatus.longitude},${range}&apiKey={${API_KEY}}`; 
+	httpGetAsync(apiCall, function(response){
+		console.log(response); 
 	})
 }
 
+function httpGetAsync(url, callback) {
+	let xmlHttpReq = new XMLHttpRequest();
+	xmlHttpReq.onreadystatechange = function () {
+		if (xmlHttpReq.readyState == 4 && xmlHttpReq.status == 200)
+		callback(xmlHttpReq.responseText);
+	}
+
+	xmlHttpReq.open("GET", url, true); // true for asynchronous 
+	xmlHttpReq.send(null);
+}
+
+
+
+/*
+	- table is formatted (Name, Long, Lat, Location)
+*/ 
+function generateTable(vehicleData, vehicleAddress){
+	let body = document.getElementById("device-table-body"); 
+	
+	if(body.firstChild){
+		body.removeChild(body.firstChild);
+	}
+	
+	let tr = document.createElement("tr");
+	let th1 = document.createElement("th")
+	th1.textContent = currentDevice.name; 
+	let th2 = document.createElement("th")
+	th2.textContent = vehicleData.latitude;
+	let th3 = document.createElement("th")
+	th3.textContent = vehicleData.longitude;
+	let th4 = document.createElement("th")
+	th4.textContent = vehicleAddress.formattedAddress;
+	
+	tr.appendChild(th1);
+	tr.appendChild(th2);
+	tr.appendChild(th3);
+	tr.appendChild(th4);
+	body.appendChild(tr);
+}

@@ -19,18 +19,18 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-xs-12 center-block text-center">
-				<h1>MyGasBuddy</h1>
+				<h1 class="title">MyGasBuddy</h1>
 			</div>
 		</div>	
 		<div class="row">
 			<div class="col-xs-12 center-block text-center">
-				<h3>Real time (estimated) gas prices and gas station locations based on asset location! Choose a vehicle to get started </h3>
+				<h3 class="title">Real time (estimated) gas prices and gas station locations based on asset location! Choose a vehicle to get started </h3>
 			</div>
 		</div>
 		<div class="row row-spacer"></div>
 		<div>
 			<div class="row">
-				<div class="col-xs-12">
+				<div class="col-xs-4">
 					<div class="dropdown">
 						<button class="btn btn-primary dropdown-toggle" type="button " id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 						  	Select a vehicle
@@ -40,14 +40,53 @@
 						</ul>
 					  </div>
 				</div>
+				<div class="col-xs-4">
+					<div class="dropdown">
+						<div class="input-group mb-3">
+							<span class="input-group-text" id="location-search-raduis">Search Radius (km)</span>
+							<input type="text" class="form-control" placeholder="100" aria-label="Raduis" aria-describedby="location-search-raduis">
+						  </div>						  
+					  </div>
+				</div>
 			</div>	
+		</div>
+		<div class="row row-spacer"></div>
+		<div>
 			<div class="row">
 				<div class="col-xs-12">
-					<div>
-						<p id="results-section">Results:</p>
+					<div id="table-parent">
+						<!--Table of device status goes here-->
+						<table class="table table-dark table-striped">
+							<thead>
+								<tr>
+									<th scope="col">Device Name</th>
+									<th scope="col">Latitude</th>
+									<th scope="col">Longitude</th>
+									<th scope="col">Location</th>
+								  </tr>
+							  
+							</thead>
+							<tbody id="device-table-body">
+								<!-- generate this with JS-->
+							</tbody>
+						  </table>
+						  
 					</div>
 				</div>
 			</div>	
+		</div>
+		<div class="row row-spacer"></div>
+		<div class="hidden" id="gas-data">
+			<div class="row">
+				<div class="col-xs-6 center-block text-center">
+					<h4 class="title">Nearest Gas stations</h3>
+					<!--Table with locations and prices-->
+				</div>
+				<div class="col-xs-6 center-block text-center">
+					<h4 class="title">Gas and Fuel Data</h3>
+					<!--Graphs and historical data-->
+				</div>
+			</div>
 		</div>
 	</div>
 	

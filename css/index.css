@@ -1,3 +1,13 @@
 .row-spacer {
 	padding-bottom: 1em;
 }
+
+.title{
+	font-family: Roboto,Helvetica,Arial,sans-serif;
+	font-feature-settings: "liga","clig";
+	font-variant-ligatures: common-ligatures;
+}
+
+.hidden { 
+	visibility: hidden;
+}
