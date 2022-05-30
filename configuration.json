@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"items": [
 		{
-			"url": "/MyGasBuddy/index.html",
+			"url": "MyGasBuddy/index.html",
 			"path": "ActivityLink",
 			"menuName": {
 				"en": "MyGasBuddy",

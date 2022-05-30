@@ -1,6 +1,6 @@
 //const secrets = fetch("./secrets.local.json").then(response => {return console.log(response.body);}); 
-const URL = "https://fuel-v2.cc.api.here.com/" 
-const API_KEY = "YOUR_API_KEY"
+const URL = "https://api.collectapi.com/gasPrice/fromCoordinates?"; 
+const API_KEY = "YOUR API KEY"
 
 let currentDevice = null; 
 
@@ -80,21 +80,35 @@ geotab.addin.integrationExample = function(api, state) {
 
 //get the results of the gas API call
 async function getFuelData(deviceStatus){ 
-	let range = 1000; //TODO: make this an input note (this is in meters)
-	let apiCall = `${URL}fuel/stations.xml?prox=${deviceStatus.latitude},${deviceStatus.longitude},${range}&apiKey={${API_KEY}}`; 
+	//init the loading spinner 
+	let spinner = document.getElementById("loading-spinner"); 
+	spinner.style.display = "block";
+	document.getElementById("right-col-title").innerHTML = ""; 
+
+	let apiCall = `${URL}lng=${deviceStatus.longitude}&lat=${deviceStatus.latitude}`; 
 	httpGetAsync(apiCall, function(response){
-		console.log(response); 
-	})
+		//console.log(response); 
+		//then unhide and populate the HTML with this data
+		let result = JSON.parse(response)['result'];
+		console.log(result);
+
+		spinner.style.display = "none";
+		let rightColTitle = document.getElementById("right-col-title");
+		rightColTitle.innerHTML = `Gas Prices in ${result["country"]}: $${result["gasoline"]} USD per litre`;
+	}); 
 }
 
 function httpGetAsync(url, callback) {
 	let xmlHttpReq = new XMLHttpRequest();
 	xmlHttpReq.onreadystatechange = function () {
-		if (xmlHttpReq.readyState == 4 && xmlHttpReq.status == 200)
-		callback(xmlHttpReq.responseText);
+		if (xmlHttpReq.readyState == 4 && xmlHttpReq.status == 200){
+			callback(xmlHttpReq.responseText);
+		}
 	}
 
 	xmlHttpReq.open("GET", url, true); // true for asynchronous 
+	xmlHttpReq.setRequestHeader("content-type", "application/json");
+	xmlHttpReq.setRequestHeader("authorization", API_KEY);
 	xmlHttpReq.send(null);
 }
 
@@ -111,13 +125,13 @@ function generateTable(vehicleData, vehicleAddress){
 	}
 	
 	let tr = document.createElement("tr");
-	let th1 = document.createElement("th")
+	let th1 = document.createElement("th");
 	th1.textContent = currentDevice.name; 
-	let th2 = document.createElement("th")
+	let th2 = document.createElement("th");
 	th2.textContent = vehicleData.latitude;
-	let th3 = document.createElement("th")
+	let th3 = document.createElement("th");
 	th3.textContent = vehicleData.longitude;
-	let th4 = document.createElement("th")
+	let th4 = document.createElement("th");
 	th4.textContent = vehicleAddress.formattedAddress;
 	
 	tr.appendChild(th1);
